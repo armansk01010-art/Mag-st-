@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-ivory: #F5F1E8;
+  --color-ivory-light: #FAF8F5;
+  --color-ivory-dark: #EAE3D2;
+  --color-olive: #263B32;
+  --color-olive-dark: #192721;
+  --color-olive-light: #3A554A;
+  --color-terracotta: #B66A4B;
+  --color-terracotta-hover: #A0573A;
+  --color-terracotta-light: #F4ECE7;
+}
+
+html {
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  background-color: #F5F1E8;
+  color: #263B32;
+}
+
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Custom refined scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F1E8;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(38, 59, 50, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(38, 59, 50, 0.4);
+}
+
+/* Perspective utilities for 3D card tilt */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
