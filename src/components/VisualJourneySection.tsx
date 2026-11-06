@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GALLERY_ITEMS } from "../data/restaurantData";
 import { Eye, Sparkles } from "lucide-react";
 
@@ -7,49 +7,62 @@ interface VisualJourneySectionProps {
 }
 
 export const VisualJourneySection: React.FC<VisualJourneySectionProps> = ({ onSelectImage }) => {
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+
+  const handleImageError = (id: string) => {
+    setImageErrors((prev) => ({ ...prev, [id]: true }));
+  };
+
   return (
-    <section className="py-24 lg:py-32 bg-[#F5F1E8] text-[#263B32]">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+    <section className="py-16 sm:py-24 lg:py-32 bg-[#F5F1E8] text-[#263B32]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-2xl mb-16">
-          <div className="flex items-center gap-3 text-xs font-semibold tracking-[0.25em] uppercase text-[#B66A4B] mb-4">
+        <div className="max-w-2xl mb-10 sm:mb-16">
+          <div className="flex items-center gap-3 text-xs font-semibold tracking-[0.25em] uppercase text-[#B66A4B] mb-3 sm:mb-4">
             <span className="w-8 h-[1px] bg-[#B66A4B]" />
             <span>Section 08 · A Visual Journey</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-normal leading-[1.1] tracking-tight text-[#263B32] mb-6">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.12] tracking-tight text-[#263B32] mb-4 sm:mb-6">
             Life at Mag St.
           </h2>
-          <p className="text-base sm:text-lg text-[#263B32]/85 font-light leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-[#263B32]/85 font-light leading-relaxed">
             Morning light across travertine stone, the gentle crackle of freshly baked loaves, and relaxed afternoons
             under Colaba's coastal trees.
           </p>
         </div>
 
         {/* Asymmetrical Editorial Image Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-stretch">
           {/* Item 1: Large Featured Interior Landscape */}
           <div
             onClick={() => onSelectImage(GALLERY_ITEMS[0])}
-            className="md:col-span-8 rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[16/10]"
+            className="sm:col-span-2 md:col-span-8 rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[16/10]"
           >
-            <img
-              src={GALLERY_ITEMS[0].image}
-              alt={GALLERY_ITEMS[0].title}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
+            {!imageErrors[GALLERY_ITEMS[0].id] ? (
+              <img
+                src={GALLERY_ITEMS[0].image}
+                alt={GALLERY_ITEMS[0].title}
+                onError={() => handleImageError(GALLERY_ITEMS[0].id)}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#263B32] text-[#F5F1E8]">
+                <Sparkles size={32} className="text-[#B66A4B] mb-2" />
+                <span className="font-serif text-2xl">{GALLERY_ITEMS[0].title}</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#263B32]/85 via-transparent to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
-            <div className="absolute bottom-6 left-6 right-6 text-[#F5F1E8] flex items-end justify-between">
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-[#F5F1E8] flex items-end justify-between">
               <div>
-                <span className="text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-1">
+                <span className="text-[11px] sm:text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-0.5 sm:mb-1">
                   {GALLERY_ITEMS[0].category}
                 </span>
-                <h3 className="font-serif text-2xl sm:text-3xl font-normal">
+                <h3 className="font-serif text-xl sm:text-2xl lg:text-3xl font-normal">
                   {GALLERY_ITEMS[0].title}
                 </h3>
                 <p className="text-xs text-[#F5F1E8]/75 font-light">{GALLERY_ITEMS[0].subtitle}</p>
               </div>
-              <div className="p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors">
+              <div className="p-2.5 sm:p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors shrink-0">
                 <Eye size={16} />
               </div>
             </div>
@@ -58,24 +71,31 @@ export const VisualJourneySection: React.FC<VisualJourneySectionProps> = ({ onSe
           {/* Item 2: Lobster Roll Portrait */}
           <div
             onClick={() => onSelectImage(GALLERY_ITEMS[1])}
-            className="md:col-span-4 rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/5]"
+            className="sm:col-span-1 md:col-span-4 rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/5]"
           >
-            <img
-              src={GALLERY_ITEMS[1].image}
-              alt={GALLERY_ITEMS[1].title}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
+            {!imageErrors[GALLERY_ITEMS[1].id] ? (
+              <img
+                src={GALLERY_ITEMS[1].image}
+                alt={GALLERY_ITEMS[1].title}
+                onError={() => handleImageError(GALLERY_ITEMS[1].id)}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#263B32] text-[#F5F1E8]">
+                <Sparkles size={28} className="text-[#B66A4B] mb-2" />
+                <span className="font-serif text-xl">{GALLERY_ITEMS[1].title}</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#263B32]/85 via-transparent to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
-            <div className="absolute bottom-6 left-6 right-6 text-[#F5F1E8] flex items-end justify-between">
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-[#F5F1E8] flex items-end justify-between">
               <div>
-                <span className="text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-1">
+                <span className="text-[11px] sm:text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-0.5 sm:mb-1">
                   {GALLERY_ITEMS[1].category}
                 </span>
-                <h3 className="font-serif text-2xl font-normal">{GALLERY_ITEMS[1].title}</h3>
+                <h3 className="font-serif text-lg sm:text-2xl font-normal">{GALLERY_ITEMS[1].title}</h3>
                 <p className="text-xs text-[#F5F1E8]/75 font-light">{GALLERY_ITEMS[1].subtitle}</p>
               </div>
-              <div className="p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors">
+              <div className="p-2.5 sm:p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors shrink-0">
                 <Eye size={16} />
               </div>
             </div>
@@ -84,26 +104,33 @@ export const VisualJourneySection: React.FC<VisualJourneySectionProps> = ({ onSe
           {/* Item 3: Bakery Spread */}
           <div
             onClick={() => onSelectImage(GALLERY_ITEMS[2])}
-            className="md:col-span-4 rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/3] md:aspect-square"
+            className="sm:col-span-1 md:col-span-4 rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/3] md:aspect-square"
           >
-            <img
-              src={GALLERY_ITEMS[2].image}
-              alt={GALLERY_ITEMS[2].title}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
+            {!imageErrors[GALLERY_ITEMS[2].id] ? (
+              <img
+                src={GALLERY_ITEMS[2].image}
+                alt={GALLERY_ITEMS[2].title}
+                onError={() => handleImageError(GALLERY_ITEMS[2].id)}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#263B32] text-[#F5F1E8]">
+                <Sparkles size={28} className="text-[#B66A4B] mb-2" />
+                <span className="font-serif text-xl">{GALLERY_ITEMS[2].title}</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#263B32]/85 via-transparent to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
-            <div className="absolute bottom-6 left-6 right-6 text-[#F5F1E8] flex items-end justify-between">
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-[#F5F1E8] flex items-end justify-between">
               <div>
-                <span className="text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-1">
+                <span className="text-[11px] sm:text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-0.5 sm:mb-1">
                   {GALLERY_ITEMS[2].category}
                 </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-normal">
+                <h3 className="font-serif text-lg sm:text-xl font-normal">
                   {GALLERY_ITEMS[2].title}
                 </h3>
                 <p className="text-xs text-[#F5F1E8]/75 font-light">{GALLERY_ITEMS[2].subtitle}</p>
               </div>
-              <div className="p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors">
+              <div className="p-2.5 sm:p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors shrink-0">
                 <Eye size={16} />
               </div>
             </div>
@@ -112,26 +139,33 @@ export const VisualJourneySection: React.FC<VisualJourneySectionProps> = ({ onSe
           {/* Item 4: Outdoor Courtyard */}
           <div
             onClick={() => onSelectImage(GALLERY_ITEMS[3])}
-            className="md:col-span-4 rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/3] md:aspect-square"
+            className="sm:col-span-1 md:col-span-4 rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/3] md:aspect-square"
           >
-            <img
-              src={GALLERY_ITEMS[3].image}
-              alt={GALLERY_ITEMS[3].title}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
+            {!imageErrors[GALLERY_ITEMS[3].id] ? (
+              <img
+                src={GALLERY_ITEMS[3].image}
+                alt={GALLERY_ITEMS[3].title}
+                onError={() => handleImageError(GALLERY_ITEMS[3].id)}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#263B32] text-[#F5F1E8]">
+                <Sparkles size={28} className="text-[#B66A4B] mb-2" />
+                <span className="font-serif text-xl">{GALLERY_ITEMS[3].title}</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#263B32]/85 via-transparent to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
-            <div className="absolute bottom-6 left-6 right-6 text-[#F5F1E8] flex items-end justify-between">
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-[#F5F1E8] flex items-end justify-between">
               <div>
-                <span className="text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-1">
+                <span className="text-[11px] sm:text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-0.5 sm:mb-1">
                   {GALLERY_ITEMS[3].category}
                 </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-normal">
+                <h3 className="font-serif text-lg sm:text-xl font-normal">
                   {GALLERY_ITEMS[3].title}
                 </h3>
                 <p className="text-xs text-[#F5F1E8]/75 font-light">{GALLERY_ITEMS[3].subtitle}</p>
               </div>
-              <div className="p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors">
+              <div className="p-2.5 sm:p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors shrink-0">
                 <Eye size={16} />
               </div>
             </div>
@@ -140,26 +174,33 @@ export const VisualJourneySection: React.FC<VisualJourneySectionProps> = ({ onSe
           {/* Item 5: Wood Fired Pizza */}
           <div
             onClick={() => onSelectImage(GALLERY_ITEMS[4])}
-            className="md:col-span-4 rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/3] md:aspect-square"
+            className="sm:col-span-1 md:col-span-4 rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer shadow-lg bg-[#263B32]/10 aspect-[4/3] md:aspect-square"
           >
-            <img
-              src={GALLERY_ITEMS[4].image}
-              alt={GALLERY_ITEMS[4].title}
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
+            {!imageErrors[GALLERY_ITEMS[4].id] ? (
+              <img
+                src={GALLERY_ITEMS[4].image}
+                alt={GALLERY_ITEMS[4].title}
+                onError={() => handleImageError(GALLERY_ITEMS[4].id)}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+              />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#263B32] text-[#F5F1E8]">
+                <Sparkles size={28} className="text-[#B66A4B] mb-2" />
+                <span className="font-serif text-xl">{GALLERY_ITEMS[4].title}</span>
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-[#263B32]/85 via-transparent to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
-            <div className="absolute bottom-6 left-6 right-6 text-[#F5F1E8] flex items-end justify-between">
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-[#F5F1E8] flex items-end justify-between">
               <div>
-                <span className="text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-1">
+                <span className="text-[11px] sm:text-xs uppercase tracking-widest text-[#B66A4B] font-semibold block mb-0.5 sm:mb-1">
                   {GALLERY_ITEMS[4].category}
                 </span>
-                <h3 className="font-serif text-xl sm:text-2xl font-normal">
+                <h3 className="font-serif text-lg sm:text-xl font-normal">
                   {GALLERY_ITEMS[4].title}
                 </h3>
                 <p className="text-xs text-[#F5F1E8]/75 font-light">{GALLERY_ITEMS[4].subtitle}</p>
               </div>
-              <div className="p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors">
+              <div className="p-2.5 sm:p-3 rounded-full bg-white/20 backdrop-blur-md text-[#F5F1E8] group-hover:bg-[#B66A4B] transition-colors shrink-0">
                 <Eye size={16} />
               </div>
             </div>

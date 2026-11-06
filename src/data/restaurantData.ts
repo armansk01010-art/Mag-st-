@@ -4,6 +4,12 @@
  * Owners: Gauri Devidayal & Jay Yousuf (Opened in 2021)
  */
 
+import heroCafeImg from "../assets/images/hero_magst_cafe_1793944068647.jpg";
+import lobsterBriocheImg from "../assets/images/food_lobster_brioche_1793944068554.jpg";
+import bakerySpreadImg from "../assets/images/bakery_croissants_cruffins_1793944069367.jpg";
+import outdoorSeatingImg from "../assets/images/cafe_outdoor_petfriendly_1793944070329.jpg";
+import signaturePizzaImg from "../assets/images/food_signature_pizza_1793944070198.jpg";
+
 export const BUSINESS_INFO = {
   name: "Mag St.",
   formerName: "Mag St. Cafe",
@@ -38,11 +44,11 @@ export const BUSINESS_INFO = {
 };
 
 export const IMAGES = {
-  heroCafe: "/src/assets/images/hero_magst_cafe_1793944068647.jpg",
-  lobsterBrioche: "/src/assets/images/food_lobster_brioche_1793944068554.jpg",
-  bakerySpread: "/src/assets/images/bakery_croissants_cruffins_1793944069367.jpg",
-  outdoorSeating: "/src/assets/images/cafe_outdoor_petfriendly_1793944070329.jpg",
-  signaturePizza: "/src/assets/images/food_signature_pizza_1793944070198.jpg",
+  heroCafe: heroCafeImg,
+  lobsterBrioche: lobsterBriocheImg,
+  bakerySpread: bakerySpreadImg,
+  outdoorSeating: outdoorSeatingImg,
+  signaturePizza: signaturePizzaImg,
 };
 
 export interface SignatureHighlightItem {
