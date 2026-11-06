@@ -13,10 +13,11 @@ export const CafeExperienceSection: React.FC = () => {
     offset: ["start end", "center center"],
   });
 
-  const scale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.94, 1]);
   const borderRadius = useTransform(scrollYProgress, [0, 1], ["24px", "0px"]);
-  const paddingX = useTransform(scrollYProgress, [0, 1], ["3%", "0%"]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.6, 0.4]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.65, 0.38]);
+  const textY = useTransform(scrollYProgress, [0.2, 0.9], [28, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0.1, 0.8], [0.4, 1]);
 
   return (
     <section
@@ -46,8 +47,6 @@ export const CafeExperienceSection: React.FC = () => {
           style={{
             scale,
             borderRadius,
-            paddingLeft: paddingX,
-            paddingRight: paddingX,
           }}
           className="w-full max-w-[1440px] overflow-hidden relative shadow-2xl transition-all duration-300 rounded-2xl lg:rounded-none"
         >
@@ -69,8 +68,14 @@ export const CafeExperienceSection: React.FC = () => {
               className="absolute inset-0 bg-[#263B32]"
             />
 
-            {/* In-Frame Typography Overlay */}
-            <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-8 lg:p-14 text-[#F5F1E8]">
+            {/* In-Frame Typography Overlay with synchronized scroll transitions */}
+            <motion.div
+              style={{
+                y: textY,
+                opacity: textOpacity,
+              }}
+              className="absolute inset-0 flex flex-col justify-between p-5 sm:p-8 lg:p-14 text-[#F5F1E8]"
+            >
               <div className="flex items-center justify-between">
                 <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#263B32]/75 backdrop-blur-md border border-[#F5F1E8]/20 text-[11px] sm:text-xs font-medium tracking-wider uppercase text-[#F5F1E8]">
                   <Heart size={13} className="text-[#B66A4B] fill-[#B66A4B]" />
@@ -90,7 +95,7 @@ export const CafeExperienceSection: React.FC = () => {
                   genuinely warm embrace for you and your pets.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

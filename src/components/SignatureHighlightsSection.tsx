@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Utensils, CheckCircle2, Sparkles } from "lucide-react";
 import { SIGNATURE_HIGHLIGHTS, SignatureHighlightItem } from "../data/restaurantData";
 
@@ -8,6 +8,16 @@ interface SignatureHighlightsProps {
 
 export const SignatureHighlightsSection: React.FC<SignatureHighlightsProps> = ({ onOpenMenu }) => {
   const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleImageError = (id: string) => {
     setImageErrors((prev) => ({ ...prev, [id]: true }));
@@ -31,35 +41,45 @@ export const SignatureHighlightsSection: React.FC<SignatureHighlightsProps> = ({
           </p>
         </div>
 
-        {/* Stacking Cards Container: Adaptive Sticky on Desktop, Clean Flow on Mobile */}
-        <div className="relative space-y-8 lg:space-y-16 pb-8 sm:pb-12">
+        {/* Stacking Cards Container (ANIMATION 02: Progressive Sticky Stacking on Mobile & Desktop) */}
+        <div className="relative pb-24 sm:pb-36 lg:pb-48">
           {SIGNATURE_HIGHLIGHTS.map((item: SignatureHighlightItem, index: number) => {
             const hasError = imageErrors[item.id];
-            // Desktop sticky offset
-            const desktopTopOffset = 96 + index * 24;
+            // Desktop sticky offset: 92px + index * 26px
+            // Mobile sticky offset: 68px + index * 14px (fits comfortably under mobile header)
+            const topOffset = isDesktop ? 92 + index * 26 : 68 + index * 14;
 
             return (
               <div
                 key={item.id}
                 style={{
-                  top: undefined,
+                  top: `${topOffset}px`,
+                  zIndex: 10 + index,
                 }}
-                className="relative lg:sticky rounded-2xl sm:rounded-3xl bg-[#F5F1E8] text-[#263B32] p-5 sm:p-8 lg:p-12 shadow-[0_12px_36px_rgba(0,0,0,0.25)] border border-[#263B32]/10 transition-all duration-300 origin-top"
-                ref={(el) => {
-                  if (el && window.innerWidth >= 1024) {
-                    el.style.top = `${desktopTopOffset}px`;
-                  }
-                }}
+                className="sticky rounded-2xl sm:rounded-3xl bg-[#F5F1E8] text-[#263B32] p-5 sm:p-7 lg:p-10 shadow-[0_-4px_24px_rgba(0,0,0,0.18),0_18px_45px_rgba(0,0,0,0.35)] border border-[#263B32]/15 transition-all duration-300 origin-top mb-16 sm:mb-24 lg:mb-32 last:mb-0"
               >
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center">
+                {/* Visual Stacking Tab Header */}
+                <div className="flex items-center justify-between pb-3 mb-4 sm:mb-6 border-b border-[#263B32]/10 text-xs text-[#263B32]/60">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#B66A4B]" />
+                    <span className="font-semibold tracking-widest uppercase text-[#B66A4B] text-[11px] sm:text-xs">
+                      Card 0{index + 1} of 0{SIGNATURE_HIGHLIGHTS.length}
+                    </span>
+                  </div>
+                  <span className="text-[11px] sm:text-xs font-serif italic text-[#263B32]/70 hidden sm:inline">
+                    Mag St. Signature Creation
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 lg:gap-10 items-center">
                   {/* Text Column */}
-                  <div className="lg:col-span-6 space-y-4 sm:space-y-5 order-2 lg:order-1">
+                  <div className="lg:col-span-6 space-y-3.5 sm:space-y-4 lg:space-y-5 order-2 lg:order-1">
                     <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                       <span className="text-[11px] sm:text-xs font-bold tracking-widest uppercase text-[#B66A4B]">
-                        0{index + 1} // {item.category}
+                        {item.category}
                       </span>
                       <span className="text-[#263B32]/30">·</span>
-                      <span className="text-[11px] sm:text-xs font-medium text-[#263B32]/70 bg-[#263B32]/5 px-2.5 py-0.5 rounded-full border border-[#263B32]/10">
+                      <span className="text-[11px] sm:text-xs font-medium text-[#263B32]/80 bg-[#263B32]/8 px-2.5 py-0.5 rounded-full border border-[#263B32]/10">
                         {item.highlightBadge}
                       </span>
                     </div>
@@ -77,15 +97,15 @@ export const SignatureHighlightsSection: React.FC<SignatureHighlightsProps> = ({
                     </p>
 
                     {/* Key Ingredients */}
-                    <div className="pt-3 sm:pt-4 border-t border-[#263B32]/10">
-                      <div className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-[#263B32]/60 mb-2">
+                    <div className="pt-2.5 sm:pt-3 border-t border-[#263B32]/10">
+                      <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#263B32]/60 mb-2">
                         Key Components &amp; Provenance
                       </div>
                       <div className="flex flex-wrap gap-1.5 sm:gap-2">
                         {item.ingredients.map((ing, i) => (
                           <span
                             key={i}
-                            className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[#263B32]/85 bg-white/80 px-2.5 py-1 rounded-md border border-[#263B32]/10"
+                            className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs text-[#263B32]/85 bg-white/90 px-2.5 py-1 rounded-md border border-[#263B32]/10 shadow-xs"
                           >
                             <CheckCircle2 size={12} className="text-[#B66A4B] shrink-0" />
                             <span>{ing}</span>
@@ -94,7 +114,7 @@ export const SignatureHighlightsSection: React.FC<SignatureHighlightsProps> = ({
                       </div>
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-1 sm:pt-2">
                       <button
                         onClick={onOpenMenu}
                         className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-[#B66A4B] hover:text-[#A0573A] transition-colors group cursor-pointer"
@@ -138,3 +158,4 @@ export const SignatureHighlightsSection: React.FC<SignatureHighlightsProps> = ({
     </section>
   );
 };
+
